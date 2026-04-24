@@ -198,7 +198,7 @@ const INITIAL_MODELS = [
     name: 'ONIROS',
     company: 'Hefaia',
     officialRate: null,
-    communityReports: 42,
+    communityReports: 0,
     isSelf: true,
     redditPosts: [],
   },
