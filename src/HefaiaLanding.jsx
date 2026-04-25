@@ -1,7 +1,30 @@
-import { useEffect } from 'react';
-import { ArrowUpRight, AlertTriangle } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { ArrowUpRight, AlertTriangle, X } from 'lucide-react';
+import { DroneIcon } from './SecretRoom.jsx';
 
-export default function HefaiaLanding({ onEnterOniros }) {
+export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
+  const [showSecretModal, setShowSecretModal] = useState(false);
+  const [secretPwd, setSecretPwd] = useState('');
+  const [secretError, setSecretError] = useState(false);
+
+  function handleSecretSubmit(e) {
+    e.preventDefault();
+    if (secretPwd.trim().toLowerCase() === 'javier') {
+      setShowSecretModal(false);
+      setSecretPwd('');
+      setSecretError(false);
+      onEnterSecret?.();
+    } else {
+      setSecretError(true);
+      setSecretPwd('');
+    }
+  }
+
+  function closeSecretModal() {
+    setShowSecretModal(false);
+    setSecretPwd('');
+    setSecretError(false);
+  }
   useEffect(() => {
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -303,6 +326,7 @@ export default function HefaiaLanding({ onEnterOniros }) {
         padding: '24px 40px',
         display: 'flex',
         justifyContent: 'space-between',
+        alignItems: 'center',
         fontSize: 11,
         letterSpacing: '0.08em',
         opacity: 0.4,
@@ -310,8 +334,162 @@ export default function HefaiaLanding({ onEnterOniros }) {
         gap: 8,
       }}>
         <span>HEFAIA · ENTROPIC LABS · MADRID, 2026</span>
-        <span>hefaia.com</span>
+        <span style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+          <button
+            onClick={() => setShowSecretModal(true)}
+            title="cuidado, que vuelas !!"
+            aria-label="hangar"
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 4,
+              cursor: 'pointer',
+              opacity: 0.55,
+              display: 'inline-flex',
+              alignItems: 'center',
+              transition: 'opacity 0.2s ease, transform 0.2s ease',
+              color: '#080808',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.55';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <DroneIcon size={14} />
+          </button>
+          <span>hefaia.com</span>
+        </span>
       </footer>
+
+      {showSecretModal && (
+        <div
+          onClick={closeSecretModal}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(8,8,8,0.78)',
+            zIndex: 200,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#0a0a0a',
+              color: '#f2ede3',
+              border: '1px solid #2a2a2a',
+              maxWidth: 360,
+              width: '100%',
+              padding: 32,
+              fontFamily: mono,
+              position: 'relative',
+            }}
+          >
+            <button
+              onClick={closeSecretModal}
+              aria-label="cerrar"
+              style={{
+                position: 'absolute',
+                top: 12,
+                right: 12,
+                background: 'none',
+                border: 'none',
+                color: '#f2ede3',
+                cursor: 'pointer',
+                padding: 4,
+                opacity: 0.6,
+              }}
+            >
+              <X size={16} />
+            </button>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <DroneIcon size={20} color="#9d0208" />
+              <span
+                style={{
+                  fontFamily: display,
+                  fontSize: 18,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                HANGAR
+              </span>
+            </div>
+            <p
+              style={{
+                fontSize: 11,
+                opacity: 0.55,
+                margin: '0 0 22px',
+                letterSpacing: '0.1em',
+              }}
+            >
+              CÓDIGO DE ACCESO
+            </p>
+
+            <form onSubmit={handleSecretSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <input
+                type="password"
+                autoFocus
+                value={secretPwd}
+                onChange={(e) => {
+                  setSecretPwd(e.target.value);
+                  if (secretError) setSecretError(false);
+                }}
+                placeholder="········"
+                style={{
+                  background: 'transparent',
+                  color: '#f2ede3',
+                  border: '1px solid ' + (secretError ? '#9d0208' : '#3a3a3a'),
+                  padding: '12px 14px',
+                  fontFamily: mono,
+                  fontSize: 14,
+                  letterSpacing: '0.2em',
+                  outline: 'none',
+                  textAlign: 'center',
+                  boxSizing: 'border-box',
+                }}
+              />
+
+              {secretError && (
+                <span
+                  style={{
+                    fontSize: 10,
+                    color: '#ef4444',
+                    letterSpacing: '0.1em',
+                    textAlign: 'center',
+                  }}
+                >
+                  el dron no responde a esa frecuencia
+                </span>
+              )}
+
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: '#9d0208',
+                  color: '#f2ede3',
+                  border: 'none',
+                  padding: '12px',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  cursor: 'pointer',
+                }}
+              >
+                DESPEGAR →
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       <style>{`
         @keyframes pulse {
