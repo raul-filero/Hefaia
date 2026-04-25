@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
-import { ArrowUpRight, AlertTriangle, X } from 'lucide-react';
+import { ArrowUpRight, AlertTriangle, X, Globe } from 'lucide-react';
 import { DroneIcon } from './SecretRoom.jsx';
+import { I18N } from './i18n/hefaiaLanding.js';
 
 export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
   const [showSecretModal, setShowSecretModal] = useState(false);
   const [secretPwd, setSecretPwd] = useState('');
   const [secretError, setSecretError] = useState(false);
+  const [lang, setLang] = useState('es');
+
+  const t = I18N[lang];
 
   function handleSecretSubmit(e) {
     e.preventDefault();
@@ -25,19 +29,28 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
     setSecretPwd('');
     setSecretError(false);
   }
+
   useEffect(() => {
+    // Cargar Archivo Black + JetBrains Mono + Noto Sans SC (para zh)
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href =
-      'https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&display=swap';
+      'https://fonts.googleapis.com/css2?family=Archivo+Black&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;900&display=swap';
     document.head.appendChild(link);
     return () => {
       if (document.head.contains(link)) document.head.removeChild(link);
     };
   }, []);
 
-  const display = "'Archivo Black', sans-serif";
-  const mono = "'JetBrains Mono', monospace";
+  // Stack tipográfico: en zh prepende Noto Sans SC para que los CJK no se rompan.
+  const display =
+    lang === 'zh'
+      ? "'Noto Sans SC', 'Archivo Black', sans-serif"
+      : "'Archivo Black', sans-serif";
+  const mono =
+    lang === 'zh'
+      ? "'Noto Sans SC', 'JetBrains Mono', monospace"
+      : "'JetBrains Mono', monospace";
 
   return (
     <div style={{ backgroundColor: '#f8f6f1', color: '#080808', fontFamily: mono, minHeight: '100vh' }}>
@@ -49,13 +62,47 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottom: '1px solid rgba(0,0,0,0.08)',
+        flexWrap: 'wrap',
+        gap: 12,
       }}>
         <span style={{ fontFamily: display, fontSize: 20, letterSpacing: '-0.03em' }}>
           HEFAIA
         </span>
-        <span style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.45 }}>
-          ENTROPIC LABS
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.45 }}>
+            {t.company}
+          </span>
+          <div style={{
+            display: 'flex',
+            alignItems: 'center',
+            border: '1px solid rgba(0,0,0,0.2)',
+            fontSize: 10,
+            fontWeight: 700,
+          }}>
+            <Globe size={11} style={{ margin: '0 6px', opacity: 0.5 }} />
+            {['es', 'en', 'zh'].map((l) => (
+              <button
+                key={l}
+                onClick={() => setLang(l)}
+                aria-pressed={lang === l}
+                style={{
+                  padding: '5px 9px',
+                  backgroundColor: lang === l ? '#080808' : 'transparent',
+                  color: lang === l ? '#f8f6f1' : '#080808',
+                  border: 'none',
+                  borderLeft: '1px solid rgba(0,0,0,0.2)',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: 10,
+                  cursor: 'pointer',
+                  letterSpacing: '0.05em',
+                }}
+              >
+                {l.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
       </nav>
 
       {/* HERO */}
@@ -81,22 +128,22 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
             display: 'inline-block',
             boxShadow: '0 0 8px #2563eb',
           }} />
-          ENTROPIC LABS · CREATING VERTICAL HELPFUL TOOLS IN THE HORIZONTAL WAY FOR HUMANITY
+          {t.badge}
         </div>
 
         <h1 style={{
           fontFamily: display,
           fontSize: 'clamp(36px, 8vw, 120px)',
-          letterSpacing: '-0.04em',
+          letterSpacing: lang === 'zh' ? '-0.02em' : '-0.04em',
           lineHeight: 0.95,
           margin: 0,
         }}>
-          EL TIEMPO ES UN<br />
+          {t.heroLine1}<br />
           <span style={{
             WebkitTextStroke: '2px #080808',
             color: 'transparent',
-          }}>CONSTRUCTO HUMANO.</span><br />
-          EL FUTURO ES AHORA.
+          }}>{t.heroLine2}</span><br />
+          {t.heroLine3}
         </h1>
 
         <p style={{
@@ -107,7 +154,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
           maxWidth: 520,
           lineHeight: 1.7,
         }}>
-          PROYECTOS EN LA INTERSECCIÓN DE IA, COGNICIÓN Y CUIDADO.
+          {t.heroDesc}
         </p>
       </section>
 
@@ -121,15 +168,13 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
         margin: '0 auto',
       }}>
         <p style={{ fontSize: 14, lineHeight: 1.8, opacity: 0.7, margin: '0 0 20px', letterSpacing: '0.03em' }}>
-          Hefaia es mi espacio personal de construcción y experimentación con inteligencia artificial.
-          Aquí viven los proyectos que me importan: herramientas honestas, investigación aplicada,
-          y prototipos que intentan resolver problemas reales.
+          {t.intro1}
         </p>
         <p style={{ fontSize: 14, lineHeight: 1.8, opacity: 0.7, margin: '0 0 20px', letterSpacing: '0.03em' }}>
-          No hay hype. No hay atajos. Solo trabajo.
+          {t.intro2}
         </p>
         <p style={{ fontSize: 14, lineHeight: 1.8, opacity: 0.7, margin: 0, letterSpacing: '0.03em' }}>
-          Madrid, 2026.
+          {t.intro3}
         </p>
       </section>
 
@@ -152,14 +197,14 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
             letterSpacing: '-0.03em',
             margin: 0,
           }}>
-            LABS
+            {t.labs}
           </h2>
           <span style={{ fontSize: 11, opacity: 0.4, letterSpacing: '0.1em' }}>
-            2 PROYECTOS ACTIVOS
+            {t.activeProjects}
           </span>
         </div>
 
-        {/* MULETIA CARD — activo, sin link por ahora */}
+        {/* MULETIA CARD */}
         <div style={{
           backgroundColor: '#ffffff',
           border: '2px solid #080808',
@@ -183,7 +228,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                 letterSpacing: '0.2em',
                 marginBottom: 24,
               }}>
-                INVESTIGACIÓN ACTIVA
+                {t.activeBadge}
               </div>
 
               <h3 style={{
@@ -204,8 +249,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                 letterSpacing: '0.03em',
                 margin: 0,
               }}>
-                Investigación en IA aplicada a Alzheimer. Acompañante cognitivo para personas
-                con deterioro de memoria y sus familias. Privacidad por diseño.
+                {t.muletiaDesc}
               </p>
             </div>
 
@@ -215,7 +259,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
           </div>
         </div>
 
-        {/* ONIROS CARD — activo, clickable, noche */}
+        {/* ONIROS CARD */}
         <div
           onClick={onEnterOniros}
           style={{
@@ -260,7 +304,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                   display: 'inline-block',
                   animation: 'pulse 2s infinite',
                 }} />
-                BETA · EN PRODUCCIÓN
+                {t.onirosBadge}
               </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 12 }}>
@@ -284,7 +328,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                 letterSpacing: '0.03em',
                 margin: 0,
               }}>
-                ¿Cuánto miente tu modelo favorito? Datos reales. Sin filtros.
+                {t.onirosDesc}
               </p>
             </div>
 
@@ -294,9 +338,9 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
 
         {/* PRÓXIMAMENTE */}
         {[
-          { name: 'MEMULETIA', desc: 'Herramienta cognitiva personal. Asistencia IA hecha a medida.' },
-          { name: 'PROMPT MUSEUM AI', desc: 'Colección curada. En construcción.' },
-          { name: 'PROYECTO OCRE', desc: 'Pronto.' },
+          { name: 'MEMULETIA', descKey: 'memuletiaDesc' },
+          { name: 'PROMPT MUSEUM AI', descKey: 'promptMuseumDesc' },
+          { name: 'PROYECTO OCRE', descKey: 'proyectoOcreDesc' },
         ].map((item) => (
           <div key={item.name} style={{
             marginTop: 12,
@@ -313,10 +357,10 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                 {item.name}
               </span>
               <p style={{ fontSize: 11, opacity: 0.35, margin: '6px 0 0', letterSpacing: '0.05em' }}>
-                {item.desc}
+                {t[item.descKey]}
               </p>
             </div>
-            <span style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.35 }}>PRÓXIMAMENTE</span>
+            <span style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.35 }}>{t.soonBadge}</span>
           </div>
         ))}
       </section>
@@ -334,12 +378,12 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
         flexWrap: 'wrap',
         gap: 8,
       }}>
-        <span>HEFAIA · ENTROPIC LABS · MADRID, 2026</span>
+        <span>{t.footer}</span>
         <span style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <button
             onClick={() => setShowSecretModal(true)}
-            title="cuidado, que vuelas !!"
-            aria-label="hangar"
+            title={t.droneTooltip}
+            aria-label={t.hangarAria}
             style={{
               background: 'none',
               border: 'none',
@@ -395,7 +439,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
           >
             <button
               onClick={closeSecretModal}
-              aria-label="cerrar"
+              aria-label={t.closeAria}
               style={{
                 position: 'absolute',
                 top: 12,
@@ -420,7 +464,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                   letterSpacing: '-0.02em',
                 }}
               >
-                HANGAR
+                {t.hangar}
               </span>
             </div>
             <p
@@ -431,7 +475,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                 letterSpacing: '0.1em',
               }}
             >
-              CÓDIGO DE ACCESO
+              {t.accessCode}
             </p>
 
             <form onSubmit={handleSecretSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -467,7 +511,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                     textAlign: 'center',
                   }}
                 >
-                  el dron no responde a esa frecuencia
+                  {t.wrongCode}
                 </span>
               )}
 
@@ -485,7 +529,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
                   cursor: 'pointer',
                 }}
               >
-                DESPEGAR →
+                {t.submit}
               </button>
             </form>
           </div>
