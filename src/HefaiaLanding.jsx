@@ -204,14 +204,31 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
           </span>
         </div>
 
-        {/* MULETIA CARD */}
-        <div style={{
-          backgroundColor: '#ffffff',
-          border: '2px solid #080808',
-          padding: 'clamp(32px, 4vw, 56px)',
-          marginBottom: 16,
-          position: 'relative',
-        }}>
+        {/* MULETIA CARD — clickable, abre muletia.com en pestaña nueva */}
+        <a
+          href="https://muletia.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            display: 'block',
+            textDecoration: 'none',
+            color: 'inherit',
+            backgroundColor: '#ffffff',
+            border: '2px solid #080808',
+            padding: 'clamp(32px, 4vw, 56px)',
+            marginBottom: 16,
+            position: 'relative',
+            transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 20px 60px rgba(0,0,0,0.12)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -253,11 +270,9 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret }) {
               </p>
             </div>
 
-            <div style={{ opacity: 0.2 }}>
-              <ArrowUpRight size={32} strokeWidth={1.5} />
-            </div>
+            <ArrowUpRight size={32} strokeWidth={1.5} style={{ opacity: 0.45 }} />
           </div>
-        </div>
+        </a>
 
         {/* ONIROS CARD */}
         <div
