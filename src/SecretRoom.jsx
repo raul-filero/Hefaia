@@ -404,7 +404,7 @@ function StarryNight({ onBack, onOpen }) {
         >
           <img
             src={expandedImage}
-            alt=""
+            alt="Foto de Javier"
             style={{
               maxWidth: '90vw',
               maxHeight: '90vh',
