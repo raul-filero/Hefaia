@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, AlertTriangle, X, Globe } from 'lucide-react';
-import { DroneIcon, PlaneIcon, BoltIcon, BriefcaseIcon, BrainIcon } from './SecretRoom.jsx';
+import { DroneIcon, PlaneIcon, BoltIcon, BriefcaseIcon, BrainIcon, MusicIcon } from './SecretRoom.jsx';
 import { I18N } from './i18n/hefaiaLanding.js';
 
 export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEscorial, onEnterSuperpoder, onEnterPolitropico, lang: langProp, setLang: setLangProp }) {
@@ -19,6 +19,9 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
   const [showTdahModal, setShowTdahModal] = useState(false);
   const [tdahPwd, setTdahPwd] = useState('');
   const [tdahError, setTdahError] = useState(false);
+  const [showNeuroModal, setShowNeuroModal] = useState(false);
+  const [neuroPwd, setNeuroPwd] = useState('');
+  const [neuroError, setNeuroError] = useState(false);
   // Lang sincronizado via props desde main.jsx; fallback local si se monta solo.
   const [langLocal, setLangLocal] = useState('en');
   const lang = langProp ?? langLocal;
@@ -119,6 +122,25 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
     setShowTdahModal(false);
     setTdahPwd('');
     setTdahError(false);
+  }
+
+  function handleNeuroSubmit(e) {
+    e.preventDefault();
+    if (neuroPwd.trim().toLowerCase() === 'neuro') {
+      setShowNeuroModal(false);
+      setNeuroPwd('');
+      setNeuroError(false);
+      window.open('https://github.com/raul-filero/NeuroMusic', '_blank');
+    } else {
+      setNeuroError(true);
+      setNeuroPwd('');
+    }
+  }
+
+  function closeNeuroModal() {
+    setShowNeuroModal(false);
+    setNeuroPwd('');
+    setNeuroError(false);
   }
 
   useEffect(() => {
@@ -620,6 +642,34 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
             }}
           >
             <BrainIcon size={14} />
+          </button>
+          <button
+            onClick={() => setShowNeuroModal(true)}
+            title="NeuroMusic"
+            aria-label="Acceso a NeuroMusic"
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 4,
+              cursor: 'pointer',
+              opacity: 0.55,
+              display: 'inline-flex',
+              alignItems: 'center',
+              transition: 'opacity 0.2s ease, transform 0.2s ease',
+              color: '#080808',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.color = '#b400ff';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.55';
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.color = '#080808';
+            }}
+          >
+            <MusicIcon size={14} />
           </button>
           <span>hefaia.com</span>
         </span>
@@ -1139,6 +1189,105 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
                 }}
               >
                 ACCEDER
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showNeuroModal && (
+        <div
+          onClick={closeNeuroModal}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(6,0,16,0.9)',
+            zIndex: 200,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#060010',
+              color: '#f0f0ff',
+              border: '1px solid rgba(180,0,255,0.4)',
+              boxShadow: '0 0 60px rgba(180,0,255,0.18), 0 0 120px rgba(0,245,255,0.06)',
+              maxWidth: 360,
+              width: '100%',
+              padding: 32,
+              fontFamily: mono,
+              position: 'relative',
+            }}
+          >
+            <button
+              onClick={closeNeuroModal}
+              aria-label="Cerrar"
+              style={{
+                position: 'absolute', top: 12, right: 12,
+                background: 'none', border: 'none',
+                color: 'rgba(180,0,255,0.5)', cursor: 'pointer',
+                padding: 4,
+              }}
+            >
+              <X size={16} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <MusicIcon size={20} color="#b400ff" />
+              <span style={{ fontFamily: display, fontSize: 18, letterSpacing: '-0.02em', color: '#b400ff' }}>
+                NEUROMUSIC
+              </span>
+            </div>
+            <p style={{ fontSize: 10, opacity: 0.4, margin: '0 0 22px', letterSpacing: '0.15em' }}>
+              SEÑAL PRIVADA · CÓDIGO DE ACCESO
+            </p>
+            <form onSubmit={handleNeuroSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <input
+                type="password"
+                autoFocus
+                value={neuroPwd}
+                onChange={(e) => {
+                  setNeuroPwd(e.target.value);
+                  if (neuroError) setNeuroError(false);
+                }}
+                placeholder="········"
+                style={{
+                  background: 'transparent',
+                  color: '#00f5ff',
+                  border: '1px solid ' + (neuroError ? '#ff006e' : 'rgba(0,245,255,0.3)'),
+                  padding: '12px 14px',
+                  fontFamily: mono,
+                  fontSize: 14,
+                  letterSpacing: '0.2em',
+                  outline: 'none',
+                  textAlign: 'center',
+                  boxSizing: 'border-box',
+                  width: '100%',
+                }}
+              />
+              {neuroError && (
+                <span style={{ fontSize: 10, color: '#ff006e', letterSpacing: '0.1em', textAlign: 'center' }}>
+                  SEÑAL NO RECONOCIDA
+                </span>
+              )}
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: '#b400ff',
+                  color: '#060010',
+                  border: 'none',
+                  padding: '12px',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  cursor: 'pointer',
+                }}
+              >
+                SINTONIZAR →
               </button>
             </form>
           </div>

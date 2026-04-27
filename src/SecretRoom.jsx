@@ -71,6 +71,25 @@ export function BriefcaseIcon({ size = 16, color = 'currentColor' }) {
   );
 }
 
+export function MusicIcon({ size = 16, color = 'currentColor' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+  );
+}
+
 // Las 29 palabras: nombres + lugares + memorias compartidas con su padre.
 const WORDS = [
   'Violeta', 'Marivi', 'Raúl', 'Javier', 'Chula', 'Canito',
