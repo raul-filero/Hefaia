@@ -178,14 +178,9 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
         flexWrap: 'wrap',
         gap: 12,
       }}>
-        <video
-          src="/hefaia-logo.mp4"
-          autoPlay
-          loop
-          muted
-          playsInline
-          style={{ height: 48, display: 'block' }}
-        />
+        <span style={{ fontFamily: display, fontSize: 20, letterSpacing: '-0.03em' }}>
+          HEFAIA
+        </span>
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
           <span style={{ fontSize: 11, letterSpacing: '0.15em', opacity: 0.45 }}>
             {t.company}
@@ -470,6 +465,106 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
             </div>
 
             <ArrowUpRight size={32} strokeWidth={1.5} style={{ opacity: 0.4 }} />
+          </div>
+        </div>
+
+        {/* NEUROMUSIC CARD */}
+        <div
+          onClick={() => setShowNeuroModal(true)}
+          style={{
+            backgroundColor: '#060010',
+            color: '#f0f0ff',
+            padding: 'clamp(32px, 4vw, 56px)',
+            cursor: 'pointer',
+            position: 'relative',
+            overflow: 'hidden',
+            border: '1px solid rgba(180,0,255,0.3)',
+            marginBottom: 16,
+            transition: 'transform 0.25s ease, box-shadow 0.25s ease',
+          }}
+          onMouseEnter={e => {
+            e.currentTarget.style.transform = 'translateY(-3px)';
+            e.currentTarget.style.boxShadow = '0 20px 60px rgba(180,0,255,0.2), 0 0 0 1px rgba(180,0,255,0.5)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = 'none';
+          }}
+        >
+          {/* Ambient glow fondo */}
+          <div style={{
+            position: 'absolute', inset: 0, pointerEvents: 'none',
+            background: 'radial-gradient(ellipse at 20% 50%, rgba(180,0,255,0.07) 0%, rgba(0,245,255,0.04) 50%, transparent 70%)',
+          }} />
+
+          {/* Equalizer bars decorativas — esquina derecha */}
+          <div style={{
+            position: 'absolute', right: 'clamp(24px,4vw,56px)', top: '50%',
+            transform: 'translateY(-50%)',
+            display: 'flex', alignItems: 'flex-end', gap: 4, height: 48,
+            pointerEvents: 'none',
+          }}>
+            {[0.4, 0.7, 1, 0.6, 0.9, 0.5, 0.8, 0.3, 0.65, 0.45].map((h, i) => (
+              <div key={i} style={{
+                width: 4,
+                height: `${h * 100}%`,
+                borderRadius: 2,
+                background: i % 3 === 0 ? '#ff006e' : i % 3 === 1 ? '#b400ff' : '#00f5ff',
+                opacity: 0.5,
+                animation: `eq-bar ${0.8 + i * 0.15}s ease-in-out infinite alternate`,
+                animationDelay: `${i * 0.08}s`,
+              }} />
+            ))}
+          </div>
+
+          <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                border: '1px solid rgba(255,0,110,0.5)',
+                padding: '4px 10px',
+                fontSize: 9,
+                letterSpacing: '0.2em',
+                color: '#ff006e',
+                marginBottom: 24,
+              }}>
+                <span style={{
+                  width: 5, height: 5, borderRadius: '50%',
+                  backgroundColor: '#ff006e',
+                  display: 'inline-block',
+                  animation: 'pulse 2s infinite',
+                }} />
+                {t.neuromusicBadge}
+              </div>
+
+              <h3 style={{
+                fontFamily: display,
+                fontSize: 'clamp(32px, 5vw, 64px)',
+                letterSpacing: '-0.04em',
+                margin: '0 0 12px',
+                lineHeight: 1,
+                background: 'linear-gradient(90deg, #ff006e, #b400ff, #00f5ff)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}>
+                NEUROMUSIC
+              </h3>
+
+              <p style={{
+                fontSize: 13,
+                opacity: 0.55,
+                maxWidth: 500,
+                lineHeight: 1.6,
+                letterSpacing: '0.03em',
+                margin: 0,
+                color: '#f0f0ff',
+              }}>
+                {t.neuromusicDesc}
+              </p>
+            </div>
+
+            <ArrowUpRight size={32} strokeWidth={1.5} style={{ opacity: 0.35, color: '#b400ff' }} />
           </div>
         </div>
 
@@ -1303,6 +1398,10 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
         @keyframes pulse {
           0%, 100% { opacity: 1; }
           50% { opacity: 0.3; }
+        }
+        @keyframes eq-bar {
+          from { transform: scaleY(0.3); opacity: 0.35; }
+          to   { transform: scaleY(1);   opacity: 0.7;  }
         }
       `}</style>
     </div>
