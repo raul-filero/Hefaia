@@ -28,6 +28,29 @@ function DroneIcon({ size = 16, color = 'currentColor' }) {
 }
 
 // Maletín/CRM — icono briefcase inline.
+export function BrainIcon({ size = 16, color = 'currentColor' }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke={color}
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M9 3C6.8 3 5 4.8 5 7c0 .9.3 1.7.8 2.4C4.7 10 4 11.1 4 12.4c0 1.5.9 2.8 2.1 3.4C6 16.5 6 17.2 6 18c0 1.1.9 2 2 2h1" />
+      <path d="M15 3c2.2 0 4 1.8 4 4 0 .9-.3 1.7-.8 2.4C19.3 10 20 11.1 20 12.4c0 1.5-.9 2.8-2.1 3.4.1.7.1 1.4.1 2.2 0 1.1-.9 2-2 2h-1" />
+      <path d="M9 3h6" />
+      <path d="M9 20h6" />
+      <line x1="12" y1="3" x2="12" y2="20" />
+      <line x1="9" y1="9" x2="15" y2="9" />
+      <line x1="9" y1="14" x2="15" y2="14" />
+    </svg>
+  );
+}
+
 export function BriefcaseIcon({ size = 16, color = 'currentColor' }) {
   return (
     <svg

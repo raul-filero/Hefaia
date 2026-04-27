@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { ArrowUpRight, AlertTriangle, X, Globe } from 'lucide-react';
-import { DroneIcon, PlaneIcon, BoltIcon, BriefcaseIcon } from './SecretRoom.jsx';
+import { DroneIcon, PlaneIcon, BoltIcon, BriefcaseIcon, BrainIcon } from './SecretRoom.jsx';
 import { I18N } from './i18n/hefaiaLanding.js';
 
-export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEscorial, onEnterSuperpoder, lang: langProp, setLang: setLangProp }) {
+export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEscorial, onEnterSuperpoder, onEnterPolitropico, lang: langProp, setLang: setLangProp }) {
   const [showSecretModal, setShowSecretModal] = useState(false);
   const [secretPwd, setSecretPwd] = useState('');
   const [secretError, setSecretError] = useState(false);
@@ -16,6 +16,9 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
   const [showCrmModal, setShowCrmModal] = useState(false);
   const [crmPwd, setCrmPwd] = useState('');
   const [crmError, setCrmError] = useState(false);
+  const [showTdahModal, setShowTdahModal] = useState(false);
+  const [tdahPwd, setTdahPwd] = useState('');
+  const [tdahError, setTdahError] = useState(false);
   // Lang sincronizado via props desde main.jsx; fallback local si se monta solo.
   const [langLocal, setLangLocal] = useState('en');
   const lang = langProp ?? langLocal;
@@ -97,6 +100,25 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
     setShowCrmModal(false);
     setCrmPwd('');
     setCrmError(false);
+  }
+
+  function handleTdahSubmit(e) {
+    e.preventDefault();
+    if (tdahPwd.trim().toLowerCase() === 'tdah') {
+      setShowTdahModal(false);
+      setTdahPwd('');
+      setTdahError(false);
+      onEnterPolitropico?.();
+    } else {
+      setTdahError(true);
+      setTdahPwd('');
+    }
+  }
+
+  function closeTdahModal() {
+    setShowTdahModal(false);
+    setTdahPwd('');
+    setTdahError(false);
   }
 
   useEffect(() => {
@@ -573,6 +595,32 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
           >
             <BriefcaseIcon size={14} />
           </button>
+          <button
+            onClick={() => setShowTdahModal(true)}
+            title="Investigación"
+            aria-label="Acceso a investigación"
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: 4,
+              cursor: 'pointer',
+              opacity: 0.55,
+              display: 'inline-flex',
+              alignItems: 'center',
+              transition: 'opacity 0.2s ease, transform 0.2s ease',
+              color: '#080808',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.opacity = '1';
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = '0.55';
+              e.currentTarget.style.transform = 'translateY(0)';
+            }}
+          >
+            <BrainIcon size={14} />
+          </button>
           <span>hefaia.com</span>
         </span>
       </footer>
@@ -994,6 +1042,103 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
                 }}
               >
                 {t.crmSubmit}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showTdahModal && (
+        <div
+          onClick={closeTdahModal}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(8,8,20,0.82)',
+            zIndex: 200,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+          }}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              backgroundColor: '#fafafa',
+              color: '#111',
+              border: '1px solid #e0e0e0',
+              maxWidth: 360,
+              width: '100%',
+              padding: 32,
+              fontFamily: mono,
+              position: 'relative',
+            }}
+          >
+            <button
+              onClick={closeTdahModal}
+              aria-label="Cerrar"
+              style={{
+                position: 'absolute', top: 12, right: 12,
+                background: 'none', border: 'none',
+                color: '#555', cursor: 'pointer',
+                padding: 4, opacity: 0.6,
+              }}
+            >
+              <X size={16} />
+            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
+              <BrainIcon size={20} color="#1a1a2e" />
+              <span style={{ fontFamily: display, fontSize: 18, letterSpacing: '-0.02em', color: '#1a1a2e' }}>
+                Investigación
+              </span>
+            </div>
+            <p style={{ fontSize: 11, opacity: 0.5, margin: '0 0 22px', letterSpacing: '0.1em' }}>
+              CÓDIGO DE ACCESO
+            </p>
+            <form onSubmit={handleTdahSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <input
+                type="password"
+                autoFocus
+                value={tdahPwd}
+                onChange={(e) => {
+                  setTdahPwd(e.target.value);
+                  if (tdahError) setTdahError(false);
+                }}
+                placeholder="········"
+                style={{
+                  background: '#fff',
+                  color: '#111',
+                  border: '1px solid ' + (tdahError ? '#9d0208' : '#ccc'),
+                  padding: '12px 14px',
+                  fontFamily: mono,
+                  fontSize: 14,
+                  letterSpacing: '0.2em',
+                  outline: 'none',
+                  textAlign: 'center',
+                  boxSizing: 'border-box',
+                }}
+              />
+              {tdahError && (
+                <span style={{ fontSize: 10, color: '#ef4444', letterSpacing: '0.1em', textAlign: 'center' }}>
+                  CÓDIGO INCORRECTO
+                </span>
+              )}
+              <button
+                type="submit"
+                style={{
+                  backgroundColor: '#1a1a2e',
+                  color: '#fff',
+                  border: 'none',
+                  padding: '12px',
+                  fontFamily: mono,
+                  fontWeight: 700,
+                  fontSize: 12,
+                  letterSpacing: '0.2em',
+                  cursor: 'pointer',
+                }}
+              >
+                ACCEDER
               </button>
             </form>
           </div>
