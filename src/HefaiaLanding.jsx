@@ -482,7 +482,7 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
 
         {/* NEUROMUSIC CARD */}
         <div
-          onClick={() => setShowNeuroModal(true)}
+          onClick={() => window.open('https://github.com/raul-filero/NeuroMusic', '_blank')}
           style={{
             backgroundColor: '#060010',
             color: '#f0f0ff',
