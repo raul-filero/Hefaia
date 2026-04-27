@@ -224,6 +224,18 @@ export default function HefaiaLanding({ onEnterOniros, onEnterSecret, onEnterEsc
         maxWidth: 1100,
         margin: '0 auto',
       }}>
+        <video
+          src="/hefaia-logo.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+          style={{
+            width: 'clamp(140px, 18vw, 220px)',
+            display: 'block',
+            marginBottom: 40,
+          }}
+        />
         <div style={{
           display: 'inline-flex',
           alignItems: 'center',
